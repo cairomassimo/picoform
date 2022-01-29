@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /submissions/{document} {
+      allow create: if true
+        && request.resource.data.time == request.time
+        && request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && get(/databases/$(database)/documents/config/main).data.canAnswer == true
+      ;
+      allow read: if true
+        && request.auth != null
+        && resource.data.uid == request.auth.uid
+        && resource.data.token != null
+      ;
+    }
+    match /config/main {
+      allow get: if true;
+    }
+  }
+}

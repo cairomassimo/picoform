@@ -1,0 +1,5 @@
+import * as firebase from '@firebase/app';
+
+export default
+// Firebase configuration will be appended here
+// BEGIN FIREBASE CONFIGURATION

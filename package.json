@@ -41,5 +41,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "commander": "^8.3.0",
+    "firebase-admin": "^10.0.2",
+    "firebase-tools": "^10.1.2",
+    "inquirer": "^8.2.0",
+    "ts-node": "^10.4.0"
   }
 }
