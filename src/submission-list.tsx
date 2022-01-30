@@ -1,9 +1,9 @@
 import { User } from "@firebase/auth";
-import { limit, onSnapshot, onSnapshotsInSync, orderBy, query, where } from "@firebase/firestore";
+import { limit, onSnapshot, orderBy, query, where } from "@firebase/firestore";
 import { useEffect, useState } from "react";
-import { Submission } from "./submission";
+import { submissionCollection } from "./firestore";
 import { previousAnswersLimit } from "./main";
-import { submissionCollection, firestore } from "./firestore";
+import { Submission } from "./submission";
 
 export function useSubmissions(user: User, token: string | null) {
   const [submissions, setSubmissions] = useState<Submission[] | null>(null);
@@ -22,15 +22,6 @@ export function useSubmissions(user: User, token: string | null) {
       (snapshot) => setSubmissions(snapshot.docs.map((doc) => doc.data()))
     );
   }, [token, user]);
-
-  useEffect(
-    () =>
-      onSnapshotsInSync(firestore, () => {
-        // If no snapshot was received, then there are no previous answers
-        setSubmissions((x) => x ?? []);
-      }),
-    []
-  );
 
   return submissions;
 }

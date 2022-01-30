@@ -15,7 +15,7 @@ export function SubmissionTable({
         <FormattedMessage defaultMessage="Recent submissions" id="submission-table-title" />
       </h2>
       {submissions.length === 0 && (
-        <FormattedMessage defaultMessage="Recent submissions" id="submission-table-empty-message" />
+        <FormattedMessage defaultMessage="No answers submitted." id="submission-table-empty-message" />
       )}
       {submissions.length > 0 && (
         <div
