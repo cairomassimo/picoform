@@ -19,5 +19,16 @@
       ]
     }
   ],
-  "fieldOverrides": []
+  "fieldOverrides": [
+    {
+      "collectionGroup": "submissions",
+      "fieldPath": "time",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "submissions",
+      "fieldPath": "answers",
+      "indexes": []
+    }
+  ]
 }

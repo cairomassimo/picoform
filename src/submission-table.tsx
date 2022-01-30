@@ -1,4 +1,5 @@
 import { css, cx } from "@emotion/css";
+import { FormattedMessage } from "react-intl";
 import { Submission } from "./submission";
 
 export function SubmissionTable({
@@ -10,8 +11,12 @@ export function SubmissionTable({
 }) {
   return (
     <>
-      <h2>Recent submissions</h2>
-      {previousAnswers.length === 0 && <>No submissions.</>}
+      <h2>
+        <FormattedMessage defaultMessage="Recent submissions" id="submission-table-title" />
+      </h2>
+      {previousAnswers.length === 0 && (
+        <FormattedMessage defaultMessage="Recent submissions" id="submission-table-empty-message" />
+      )}
       {previousAnswers.length > 0 && (
         <div
           className={css`
@@ -39,7 +44,7 @@ export function SubmissionTable({
                   `}
                   colSpan={numberOfQuestions}
                 >
-                  Answers
+                  <FormattedMessage defaultMessage="Answers" id="submission-table-answers-header" />
                 </th>
               </tr>
               <tr>
@@ -49,7 +54,7 @@ export function SubmissionTable({
                     text-align: center;
                   `}
                 >
-                  Saved at
+                  <FormattedMessage defaultMessage="Saved at" id="submission-table-time-header" />
                 </th>
                 {Array.from({ length: numberOfQuestions }, (unused, i) => (
                   <th
@@ -93,7 +98,9 @@ export function SubmissionTable({
                       white-space: nowrap;
                     `}
                   >
-                    {x.time === null && <>Saving....</>}
+                    {x.time === null && (
+                      <FormattedMessage defaultMessage="Saving..." id="submission-table-pending-message" />
+                    )}
                     {x.time !== null && <>{x.time.toDate().toLocaleString()}</>}
                   </th>
                   {Array.from({ length: numberOfQuestions }, (unused, i) => (
@@ -119,9 +126,14 @@ export function SubmissionTable({
           </table>
         </div>
       )}
-      <p className="alert alert-warning">
-        NB: only the answers submitted <strong>from this browser</strong> are shown here.{" "}
-        <i>The official submission is the most recent one, even if submitted from a different browser.</i>
+      <p>
+        <FormattedMessage
+          defaultMessage={`
+NB: only the answers submitted <strong>from this browser</strong> are shown here.
+<emph>The official submission is the most recent one, even if submitted from a different browser.</emph>
+`}
+          id="submission-footer-warning"
+        />
       </p>
     </>
   );

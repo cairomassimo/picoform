@@ -1,5 +1,6 @@
 import { css } from "@emotion/css";
 import { useState } from "react";
+import { FormattedMessage } from "react-intl";
 
 type TokenState = {
   token: string | null;
@@ -45,7 +46,7 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
         `}
         htmlFor="token"
       >
-        Your token
+        <FormattedMessage defaultMessage="Your token" id="token-input-label" />
       </label>
       <div
         className={css`
@@ -76,7 +77,7 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
           disabled={token !== null}
           type="submit"
         >
-          Set token
+          <FormattedMessage defaultMessage="Set token" id="token-submit-label" />
         </button>
 
         <button
@@ -91,7 +92,7 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
             }
           }}
         >
-          Change token
+          <FormattedMessage defaultMessage="Change token" id="token-chnage-label" />
         </button>
       </div>
     </form>

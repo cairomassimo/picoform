@@ -2,7 +2,7 @@ import { User } from "@firebase/auth";
 import { limit, onSnapshot, onSnapshotsInSync, orderBy, query, where } from "@firebase/firestore";
 import { useEffect, useState } from "react";
 import { Submission } from "./submission";
-import { previousAnswersLimit } from "./App";
+import { previousAnswersLimit } from "./main";
 import { submissionCollection, firestore } from "./firestore";
 
 export function useSubmissions(user: User, token: string | null) {

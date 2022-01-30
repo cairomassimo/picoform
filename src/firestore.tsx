@@ -1,7 +1,7 @@
 import { collection, CollectionReference, doc, DocumentReference, getFirestore } from "@firebase/firestore";
 import { Submission } from "./submission";
 import { firebaseApp } from "./firebase-init";
-import { Config } from "./App";
+import { Config } from "./main";
 
 export const firestore = getFirestore(firebaseApp);
 export const configDoc = doc(firestore, "config", "main") as DocumentReference<Config>;

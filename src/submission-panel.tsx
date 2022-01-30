@@ -2,6 +2,7 @@ import { User } from "@firebase/auth";
 import { SubmissionForm } from "./submission-form";
 import { SubmissionTable } from "./submission-table";
 import { useSubmissions } from "./submission-list";
+import { FormattedMessage } from "react-intl";
 
 export function SubmissionPanel({
   numberOfQuestions,
@@ -19,10 +20,10 @@ export function SubmissionPanel({
 
   return (
     <div>
-      {!submissions && <>Loading...</>}
+      {!submissions && <FormattedMessage defaultMessage="Loading..." id="submissions-loading-message" />}
       {submissions && (
         <>
-          {!canAnswer && <>Cannot answer now.</>}
+          {!canAnswer && <FormattedMessage defaultMessage="Cannot answer now." id="cannot-submit-message" />}
           {canAnswer && (
             <SubmissionForm
               user={user}

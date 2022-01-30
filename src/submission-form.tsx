@@ -1,16 +1,16 @@
 import { css } from "@emotion/css";
 import { User } from "@firebase/auth";
-import {
-  addDoc,
-  DocumentReference, serverTimestamp
-} from "@firebase/firestore";
+import { addDoc, DocumentReference, serverTimestamp } from "@firebase/firestore";
 import { Fragment, useState } from "react";
 import { Submission } from "./submission";
-import { getAnswers } from "./App";
 import { submissionCollection } from "./firestore";
+import { FormattedMessage } from "react-intl";
 
 export function SubmissionForm({
-  user, token, numberOfQuestions, lastSubmission,
+  user,
+  token,
+  numberOfQuestions,
+  lastSubmission,
 }: {
   user: User;
   token: string | null;
@@ -18,7 +18,7 @@ export function SubmissionForm({
   lastSubmission: Submission | null;
 }) {
   const [nextSubmissionState, setNextSubmissionState] = useState<
-    { status: "pending"; promise: Promise<DocumentReference>; } | { status: "success"; } | { status: "error"; } | null
+    { status: "pending"; promise: Promise<DocumentReference> } | { status: "success" } | { status: "error" } | null
   >(null);
 
   const [pristine, setPristine] = useState(true);
@@ -42,11 +42,13 @@ export function SubmissionForm({
         setPristine(true);
 
         promise.then(() => {
-          setNextSubmissionState((previous) => previous?.status === "pending" && previous.promise === promise ? { status: "success" } : previous
+          setNextSubmissionState((previous) =>
+            previous?.status === "pending" && previous.promise === promise ? { status: "success" } : previous
           );
         });
         promise.catch(() => {
-          setNextSubmissionState((previous) => previous?.status === "pending" && previous.promise === promise ? { status: "error" } : previous
+          setNextSubmissionState((previous) =>
+            previous?.status === "pending" && previous.promise === promise ? { status: "error" } : previous
           );
         });
       }}
@@ -96,7 +98,8 @@ export function SubmissionForm({
                 defaultValue={lastSubmission?.answers?.[i] ?? ""}
                 placeholder={lastSubmission?.answers?.[i] ?? ""}
                 id={`a${i + 1}`}
-                name={`a${i + 1}`} />
+                name={`a${i + 1}`}
+              />
             </label>
           </Fragment>
         ))}
@@ -129,7 +132,7 @@ export function SubmissionForm({
               disabled={nextSubmissionState !== null}
               type="submit"
             >
-              Save answers
+              <FormattedMessage defaultMessage="Save answers" id="answers-submit-label" />
             </button>
             <button
               type="button"
@@ -139,18 +142,42 @@ export function SubmissionForm({
               }}
               disabled={!nextSubmissionState}
             >
-              {nextSubmissionState?.status === "error" ? <>Retry</> : <>Change answers</>}
+              {nextSubmissionState?.status === "error" ? (
+                <FormattedMessage defaultMessage="Try again" id="answers-retry-label" />
+              ) : (
+                <FormattedMessage defaultMessage="Changes answers" id="answers-change-label" />
+              )}
             </button>
           </div>
           <div>
-            {!nextSubmissionState && pristine && <>No answer was changed</>}
-            {!nextSubmissionState && !pristine && <>Answers NOT saved yet</>}
-            {nextSubmissionState?.status === "pending" && <>Saving answers...</>}
-            {nextSubmissionState?.status === "success" && <>Answers saved!</>}
-            {nextSubmissionState?.status === "error" && <>An error occurred. Answers NOT saved.</>}
+            {!nextSubmissionState && pristine && (
+              <FormattedMessage defaultMessage="No answer was changed" id="submission-status-pristine" />
+            )}
+            {!nextSubmissionState && !pristine && (
+              <FormattedMessage defaultMessage="Answers NOT saved yet" id="submission-status-unsubmitted" />
+            )}
+            {nextSubmissionState?.status === "pending" && (
+              <FormattedMessage defaultMessage="Saving answers..." id="submission-status-pending-message" />
+            )}
+            {nextSubmissionState?.status === "success" && (
+              <FormattedMessage defaultMessage="Answers saved!" id="submission-status-success-message" />
+            )}
+            {nextSubmissionState?.status === "error" && (
+              <FormattedMessage
+                defaultMessage="An error occurred. Answers NOT saved."
+                id="submission-status-error-message"
+              />
+            )}
           </div>
         </div>
       </div>
     </form>
   );
+}
+
+function getAnswers(numberOfQuestions: number, form: EventTarget & HTMLFormElement, lastSubmission: Submission | null) {
+  return Array.from({ length: numberOfQuestions }, (unused, i) => {
+    const input = form.elements.item(i) as HTMLInputElement;
+    return [input.value || null, lastSubmission?.answers?.[i] ?? null];
+  });
 }
