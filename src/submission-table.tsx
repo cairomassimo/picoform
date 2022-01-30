@@ -3,10 +3,10 @@ import { FormattedMessage } from "react-intl";
 import { Submission } from "./submission";
 
 export function SubmissionTable({
-  previousAnswers,
+  submissions,
   numberOfQuestions,
 }: {
-  previousAnswers: Submission[];
+  submissions: Submission[];
   numberOfQuestions: number;
 }) {
   return (
@@ -14,10 +14,10 @@ export function SubmissionTable({
       <h2>
         <FormattedMessage defaultMessage="Recent submissions" id="submission-table-title" />
       </h2>
-      {previousAnswers.length === 0 && (
+      {submissions.length === 0 && (
         <FormattedMessage defaultMessage="Recent submissions" id="submission-table-empty-message" />
       )}
-      {previousAnswers.length > 0 && (
+      {submissions.length > 0 && (
         <div
           className={css`
             display: flex;
@@ -71,7 +71,7 @@ export function SubmissionTable({
               </tr>
             </thead>
             <tbody>
-              {previousAnswers.map((x, answerIndex) => (
+              {submissions.map((x, submissionIndex) => (
                 <tr
                   className={css`
                     td {
@@ -80,18 +80,16 @@ export function SubmissionTable({
                       text-align: right;
                     }
 
-                    &:not(:first-child) {
-                      td.placeholder-answer {
-                        font-weight: unset;
-                        color: #666666;
-                      }
+                    td.placeholder-answer {
+                      font-weight: unset;
+                      color: #666666;
                     }
 
                     &:nth-child(2n) {
                       background: #eeeeee;
                     }
                   `}
-                  key={answerIndex}
+                  key={submissionIndex}
                 >
                   <th
                     className={css`
@@ -107,9 +105,8 @@ export function SubmissionTable({
                     <td
                       className={cx(
                         "answer",
-                        (x.answers[i] === null ||
-                          answerIndex === previousAnswers.length - 1 ||
-                          x.answers[i] === previousAnswers[answerIndex + 1].answers[i]) &&
+                        submissionIndex > 0 &&
+                          x.answers[i] === submissions[submissionIndex - 1].answers[i] &&
                           "placeholder-answer"
                       )}
                       key={i}

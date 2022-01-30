@@ -1,8 +1,8 @@
 import { User } from "@firebase/auth";
-import { SubmissionForm } from "./submission-form";
-import { SubmissionTable } from "./submission-table";
-import { useSubmissions } from "./submission-list";
 import { FormattedMessage } from "react-intl";
+import { SubmissionForm } from "./submission-form";
+import { useSubmissions } from "./submission-list";
+import { SubmissionTable } from "./submission-table";
 
 export function SubmissionPanel({
   numberOfQuestions,
@@ -32,7 +32,7 @@ export function SubmissionPanel({
               lastSubmission={lastSubmission}
             />
           )}
-          <SubmissionTable previousAnswers={submissions} numberOfQuestions={numberOfQuestions} />
+          <SubmissionTable submissions={submissions} numberOfQuestions={numberOfQuestions} />
         </>
       )}
     </div>
