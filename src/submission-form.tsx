@@ -61,9 +61,8 @@ export function SubmissionForm({
     >
       <div
         className={css`
-          display: grid;
-          grid: auto-flow 3rem / repeat(auto-fit, minmax(14rem, auto));
-          gap: 0.5rem 1rem;
+          columns: 4 14rem;
+          column-gap: 0.5rem 1rem;
           padding: 2rem 1rem;
           overflow: auto;
         `}
@@ -72,8 +71,9 @@ export function SubmissionForm({
           <Fragment key={i}>
             <label
               className={css`
-                display: flex;
+                display: inline-flex;
                 gap: 0.25rem;
+                margin: 0.5rem 0;
               `}
             >
               <span
@@ -145,7 +145,7 @@ export function SubmissionForm({
               {nextSubmissionState?.status === "error" ? (
                 <FormattedMessage defaultMessage="Try again" id="answers-retry-label" />
               ) : (
-                <FormattedMessage defaultMessage="Changes answers" id="answers-change-label" />
+                <FormattedMessage defaultMessage="Change answers" id="answers-change-label" />
               )}
             </button>
           </div>
