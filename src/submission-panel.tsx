@@ -13,7 +13,7 @@ export function SubmissionPanel({
   numberOfQuestions: number;
   canAnswer: boolean;
   user: User;
-  token: string | null;
+  token: string;
 }) {
   const submissions = useSubmissions(user, token);
   const lastSubmission = submissions && submissions.length > 0 ? submissions[0] : null;
