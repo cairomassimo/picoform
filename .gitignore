@@ -1,6 +1,6 @@
 # Deploy-specific configuration
-/src/firebase-config-snippet.ts.txt
-/src/firebase-config.ts
+/src/firebase-config-snippet.js.txt
+/src/firebase-config.js
 /.firebaserc
 /firebase-admin-private-key.json
 

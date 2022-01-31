@@ -88,7 +88,7 @@ export function SubmissionTable({
                       text-align: right;
                     }
 
-                    td.placeholder-answer {
+                    td.redundant-answer {
                       font-weight: unset;
                       color: rgb(0 0 0 / 60%);
                     }
@@ -124,7 +124,7 @@ export function SubmissionTable({
                         "answer",
                         submissionIndex > 0 &&
                           x.answers[i] === submissions[submissionIndex - 1].answers[i] &&
-                          "placeholder-answer"
+                          "redundant-answer"
                       )}
                       key={i}
                     >
