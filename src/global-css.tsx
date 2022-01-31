@@ -5,6 +5,10 @@ injectGlobal`
     overflow-y: scroll;
   }
 
+  body {
+    margin: 1rem;
+  }
+
   * {
     min-width: auto;
     min-height: auto;

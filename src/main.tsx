@@ -15,7 +15,7 @@ export function Main() {
   const tokenState = useTokenState();
 
   const numberOfQuestions = config?.numberOfQuestions;
-  const title = config?.title ?? `Answers`;
+  const title = config?.title ?? `Contest`;
 
   return (
     <div
@@ -37,7 +37,6 @@ export function Main() {
           {numberOfQuestions !== undefined && (
             <>
               <TokenForm tokenState={tokenState} />
-              <hr />
               {tokenState.token !== null && (
                 <SubmissionPanel
                   canAnswer={config.canAnswer ?? false}

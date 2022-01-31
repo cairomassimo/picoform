@@ -66,7 +66,7 @@ export function SubmissionForm({
           margin: 1rem 0;
           padding: 1rem;
           overflow: auto;
-          background: rgba(0 0 0 / 8%);
+          background: rgba(0 0 0 / 5%);
         `}
       >
         {Array.from({ length: numberOfQuestions }, (unused, i) => (

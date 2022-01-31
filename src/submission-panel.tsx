@@ -1,3 +1,4 @@
+import { css } from "@emotion/css";
 import { User } from "@firebase/auth";
 import { FormattedMessage } from "react-intl";
 import { SubmissionForm } from "./submission-form";
@@ -19,22 +20,31 @@ export function SubmissionPanel({
   const lastSubmission = submissions && submissions.length > 0 ? submissions[0] : null;
 
   return (
-    <div>
+    <>
       {!submissions && <FormattedMessage defaultMessage="Loading..." id="submissions-loading-message" />}
       {submissions && (
         <>
-          {!canAnswer && <FormattedMessage defaultMessage="Cannot answer now." id="cannot-submit-message" />}
-          {canAnswer && (
-            <SubmissionForm
-              user={user}
-              token={token}
-              numberOfQuestions={numberOfQuestions}
-              lastSubmission={lastSubmission}
-            />
-          )}
+          <section
+            className={css`
+              margin: 1rem 0;
+            `}
+          >
+            <h2>
+              <FormattedMessage defaultMessage="Send your answers" id="submission-form-title" />
+            </h2>
+            {!canAnswer && <FormattedMessage defaultMessage="Cannot answer now." id="cannot-submit-message" />}
+            {canAnswer && (
+              <SubmissionForm
+                user={user}
+                token={token}
+                numberOfQuestions={numberOfQuestions}
+                lastSubmission={lastSubmission}
+              />
+            )}
+          </section>
           <SubmissionTable submissions={submissions} numberOfQuestions={numberOfQuestions} />
         </>
       )}
-    </div>
+    </>
   );
 }

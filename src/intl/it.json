@@ -9,6 +9,7 @@
   "loading": "Caricamento...",
   "not-configured": "Non configurato.",
   "submission-footer-warning": "NB: solo le risposte inviate <strong>da questo browser</strong> sono mostrate qui. <emph>La sottoposizione ufficiale è sempre la più recente, anche se inviata da un altro browser.</emph>",
+  "submission-form-title": "Invia le tue risposte",
   "submission-status-error-message": "Si è verificato un errore. Risposte NON salvate.",
   "submission-status-pending-message": "Salvataggio risposte...",
   "submission-status-pristine": "Nessuna risposta è stata cambiata",
@@ -17,10 +18,11 @@
   "submission-table-answers-header": "Risposte",
   "submission-table-empty-message": "Nessuna risposta inviata",
   "submission-table-pending-message": "Salvataggio...",
-  "submission-table-time-header": "Salvata alle ore",
+  "submission-table-time-header": "Orario di invio",
   "submission-table-title": "Sottoposizioni recenti",
   "submissions-loading-message": "Caricamento...",
   "token-change-label": "Cambia il token",
+  "token-form-title": "Imposta il tuo token",
   "token-input-label": "Il tuo token",
-  "token-submit-label": "Imposta il token"
+  "token-submit-label": "Salva il token"
 }

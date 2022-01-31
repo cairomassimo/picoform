@@ -10,7 +10,11 @@ export function SubmissionTable({
   numberOfQuestions: number;
 }) {
   return (
-    <>
+    <section
+      className={css`
+        margin: 1rem 0;
+      `}
+    >
       <h2>
         <FormattedMessage defaultMessage="Recent submissions" id="submission-table-title" />
       </h2>
@@ -23,6 +27,8 @@ export function SubmissionTable({
             display: flex;
             flex-flow: column;
             overflow: auto;
+            margin: 0 -1rem;
+            padding: 0 1rem;
           `}
         >
           <table
@@ -34,13 +40,24 @@ export function SubmissionTable({
             <thead
               className={css`
                 border-bottom: 2px solid black;
+                background: rgb(0 0 0 / 5%);
               `}
             >
               <tr>
-                <th />
                 <th
                   className={css`
-                    text-align: center;
+                    padding: 0.5rem;
+                    text-align: left;
+                    vertical-align: bottom;
+                  `}
+                  rowSpan={2}
+                >
+                  <FormattedMessage defaultMessage="Saved at" id="submission-table-time-header" />
+                </th>
+                <th
+                  className={css`
+                    text-align: left;
+                    padding: 0.5rem;
                   `}
                   colSpan={numberOfQuestions}
                 >
@@ -48,14 +65,6 @@ export function SubmissionTable({
                 </th>
               </tr>
               <tr>
-                <th
-                  className={css`
-                    padding: 0.5rem;
-                    text-align: center;
-                  `}
-                >
-                  <FormattedMessage defaultMessage="Saved at" id="submission-table-time-header" />
-                </th>
                 {Array.from({ length: numberOfQuestions }, (unused, i) => (
                   <th
                     className={css`
@@ -63,7 +72,6 @@ export function SubmissionTable({
                       text-align: right;
                     `}
                     key={i}
-                    rowSpan={2}
                   >
                     Q{i + 1}
                   </th>
@@ -82,18 +90,20 @@ export function SubmissionTable({
 
                     td.placeholder-answer {
                       font-weight: unset;
-                      color: #666666;
+                      color: rgb(0 0 0 / 60%);
                     }
 
                     &:nth-child(2n) {
-                      background: #eeeeee;
+                      background: rgb(0 0 0 / 5%);
                     }
                   `}
                   key={submissionIndex}
                 >
                   <th
                     className={css`
+                      padding: 0.25rem 0.5rem;
                       white-space: nowrap;
+                      text-align: left;
                     `}
                   >
                     {x.time === null && (
@@ -139,6 +149,6 @@ NB: only the answers submitted <strong>from this browser</strong> are shown here
           id="submission-footer-warning"
         />
       </p>
-    </>
+    </section>
   );
 }

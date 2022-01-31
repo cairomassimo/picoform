@@ -22,14 +22,18 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
   const { token, setToken } = tokenState;
 
   return (
-    <div
+    <section
       className={css`
-        display: flex;
+        margin: 1rem 0;
       `}
     >
+      <h2>
+        <FormattedMessage defaultMessage="Set your token" id="token-form-title" />
+      </h2>
       <form
         className={css`
           display: flex;
+          width: fit-content;
           flex-flow: column;
           gap: 1rem;
         `}
@@ -104,6 +108,6 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
           </button>
         </div>
       </form>
-    </div>
+    </section>
   );
 }
