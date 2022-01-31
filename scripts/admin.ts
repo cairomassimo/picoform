@@ -19,15 +19,22 @@ program
 program
   .command("allow-submit")
   .description("Allows users to submit")
-  .action(async (number: number) => {
+  .action(async () => {
     await admin.firestore().doc("config/main").set({ canAnswer: true }, { merge: true });
   });
 
 program
   .command("block-submit")
   .description("Allows users to submit")
-  .action(async (number: number) => {
+  .action(async () => {
     await admin.firestore().doc("config/main").set({ canAnswer: true }, { merge: true });
+  });
+
+program
+  .command("set-title <title>")
+  .description("Set the title of the form")
+  .action(async (title: string) => {
+    await admin.firestore().doc("config/main").set({ title }, { merge: true });
   });
 
 program
@@ -53,32 +60,6 @@ program
         });
         if (!follow) process.exit();
       });
-
-    await new Promise(() => {}); // wait forever
-
-    process.on("beforeExit", unsubscribe);
-  });
-
-program
-  .command("get-submissions")
-  .description("Fetches the submissions as JSON")
-  .action(async ({ follow, tail }: { follow: boolean; tail: boolean }) => {
-    let query: Query = admin.firestore().collection("submissions");
-    const unsubscribe = query.onSnapshot((snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type !== "added") return;
-        const { answers, time, token, uid } = change.doc.data() as Submission;
-        console.log(
-          JSON.stringify({
-            token,
-            time: time.toDate().toISOString(),
-            answers,
-            uid,
-          })
-        );
-      });
-      if (!follow) process.exit();
-    });
 
     await new Promise(() => {}); // wait forever
 

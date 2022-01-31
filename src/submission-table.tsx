@@ -1,5 +1,5 @@
 import { css, cx } from "@emotion/css";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, FormattedTime } from "react-intl";
 import { Submission } from "./submission";
 
 export function SubmissionTable({
@@ -99,7 +99,14 @@ export function SubmissionTable({
                     {x.time === null && (
                       <FormattedMessage defaultMessage="Saving..." id="submission-table-pending-message" />
                     )}
-                    {x.time !== null && <>{x.time.toDate().toLocaleString()}</>}
+                    {x.time !== null && (
+                      <FormattedTime
+                        value={x.time.toDate()}
+                        dateStyle="medium"
+                        timeStyle="medium"
+                        fractionalSecondDigits={3}
+                      />
+                    )}
                   </th>
                   {Array.from({ length: numberOfQuestions }, (unused, i) => (
                     <td

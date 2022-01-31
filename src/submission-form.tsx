@@ -13,7 +13,7 @@ export function SubmissionForm({
   lastSubmission,
 }: {
   user: User;
-  token: string | null;
+  token: string;
   numberOfQuestions: number;
   lastSubmission: Submission | null;
 }) {
@@ -61,19 +61,22 @@ export function SubmissionForm({
     >
       <div
         className={css`
-          columns: 4 14rem;
-          column-gap: 0.5rem 1rem;
-          padding: 2rem 1rem;
+          columns: 4 16rem;
+          column-gap: 1rem;
+          margin: 1rem 0;
+          padding: 1rem;
           overflow: auto;
+          background: rgba(0 0 0 / 8%);
         `}
       >
         {Array.from({ length: numberOfQuestions }, (unused, i) => (
           <Fragment key={i}>
             <label
               className={css`
-                display: inline-flex;
+                display: flex;
+                break-inside: avoid;
                 gap: 0.25rem;
-                margin: 0.5rem 0;
+                padding: 0.25rem 0;
               `}
             >
               <span
@@ -107,14 +110,12 @@ export function SubmissionForm({
       <div
         className={css`
           display: flex;
-          justify-content: center;
         `}
       >
         <div
           className={css`
             flex: 1;
             max-width: 32rem;
-            margin: 1rem;
           `}
         >
           <div

@@ -22,79 +22,88 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
   const { token, setToken } = tokenState;
 
   return (
-    <form
+    <div
       className={css`
         display: flex;
-        flex-flow: column;
-        margin: 2rem auto;
       `}
-      onSubmit={(event) => {
-        event.preventDefault();
-        const input = event.currentTarget.elements.namedItem("token") as HTMLInputElement;
-        setToken(input.value);
-        try {
-          localStorage.setItem("token", input.value);
-        } catch {
-          // No-op
-        }
-      }}
     >
-      <label
+      <form
         className={css`
           display: flex;
           flex-flow: column;
-        `}
-        htmlFor="token"
-      >
-        <FormattedMessage defaultMessage="Your token" id="token-input-label" />
-      </label>
-      <div
-        className={css`
-          display: flex;
           gap: 1rem;
         `}
+        onSubmit={(event) => {
+          event.preventDefault();
+          const input = event.currentTarget.elements.namedItem("token") as HTMLInputElement;
+          setToken(input.value);
+          try {
+            localStorage.setItem("token", input.value);
+          } catch {
+            // No-op
+          }
+        }}
       >
-        <input
-          autoComplete="off"
+        <label
           className={css`
-            padding: 0.5rem;
-            font-family: monospace;
-            font-size: 1.5rem;
-            font-weight: bold;
+            display: flex;
+            flex-flow: column;
           `}
-          disabled={token !== null}
-          required
-          id="token"
-          defaultValue={token ?? ""}
-          type={token ? "password" : "text"}
-        />
+          htmlFor="token"
+        >
+          <FormattedMessage defaultMessage="Your token" id="token-input-label" />
 
-        <button
+          <input
+            autoComplete="off"
+            className={css`
+              padding: 0.5rem;
+              font-family: monospace;
+              font-size: 1.5rem;
+              font-weight: bold;
+            `}
+            size={12}
+            disabled={token !== null}
+            required
+            id="token"
+            defaultValue={token ?? ""}
+            type={token ? "password" : "text"}
+          />
+        </label>
+
+        <div
           className={css`
-            font-size: 1.5rem;
-            padding: 0.5rem 1rem;
+            display: flex;
+            gap: 1rem;
           `}
-          disabled={token !== null}
-          type="submit"
         >
-          <FormattedMessage defaultMessage="Set token" id="token-submit-label" />
-        </button>
+          <button
+            className={css`
+              flex: 1 0;
+              font-size: 1.5rem;
+              padding: 0.5rem 1rem;
+            `}
+            disabled={token !== null}
+            type="submit"
+          >
+            <FormattedMessage defaultMessage="Set token" id="token-submit-label" />
+          </button>
 
-        <button
-          type="button"
-          disabled={token === null}
-          onClick={() => {
-            setToken(null);
-            try {
-              return localStorage.removeItem("token");
-            } catch {
-              // No-op
-            }
-          }}
-        >
-          <FormattedMessage defaultMessage="Change token" id="token-chnage-label" />
-        </button>
-      </div>
-    </form>
+          <button
+            type="button"
+            disabled={token === null}
+            onClick={() => {
+              setToken(null);
+              try {
+                return localStorage.removeItem("token");
+              } catch {
+                // No-op
+              }
+            }}
+          >
+            <FormattedMessage defaultMessage="Change token" id="token-change-label" />
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

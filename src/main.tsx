@@ -2,14 +2,9 @@ import { css } from "@emotion/css";
 import { FormattedMessage } from "react-intl";
 import { useAnonymousUser } from "./auth";
 import { useAppConfig } from "./config";
-import { Submission } from "./submission";
 import { SubmissionPanel } from "./submission-panel";
 import { TokenForm, useTokenState } from "./token-form";
-
-export interface Config {
-  numberOfQuestions?: number;
-  canAnswer?: boolean;
-}
+import { Helmet } from "react-helmet";
 
 export const previousAnswersLimit = 10;
 
@@ -20,6 +15,7 @@ export function Main() {
   const tokenState = useTokenState();
 
   const numberOfQuestions = config?.numberOfQuestions;
+  const title = config?.title ?? `Answers`;
 
   return (
     <div
@@ -30,6 +26,10 @@ export function Main() {
         margin: 0 auto;
       `}
     >
+      <h1>{title}</h1>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       {(!user || !config) && <FormattedMessage defaultMessage="Loading..." id="loading" />}
       {user && config && (
         <>
