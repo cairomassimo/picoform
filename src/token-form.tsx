@@ -228,6 +228,7 @@ function checkToken(input: HTMLInputElement, intl: IntlShape) {
     const checkDigit = computeCheckDigit(digits.slice(0, -1));
 
     if (digits.at(-1) !== checkDigit) {
+      console.log(`Wrong check digit, expected: '${checkDigit}'`);
       errors.push(
         intl.formatMessage(defineMessage({ defaultMessage: `Token contains an error.`, id: `token-check-digit-error` }))
       );
