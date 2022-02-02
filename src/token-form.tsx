@@ -1,6 +1,8 @@
 import { css } from "@emotion/css";
+import { defineMessage } from "@formatjs/intl";
 import { useState } from "react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, IntlShape, useIntl } from "react-intl";
+import { alphabet, computeCheckDigit, dashesIndexes, partDefinitions, patternString } from "./token";
 
 type TokenState = {
   token: string | null;
@@ -19,6 +21,7 @@ export function useTokenState(): TokenState {
 }
 
 export function TokenForm({ tokenState }: { tokenState: TokenState }) {
+  const intl = useIntl();
   const { token, setToken } = tokenState;
 
   return (
@@ -59,6 +62,9 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
 
           <input
             autoComplete="off"
+            autoCapitalize="off"
+            spellCheck="false"
+            enterKeyHint="done"
             className={css`
               padding: 0.5rem;
               font-family: monospace;
@@ -67,10 +73,25 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
             `}
             size={12}
             disabled={token !== null}
+            pattern={patternString}
             required
             id="token"
             defaultValue={token ?? ""}
             type={token ? "password" : "text"}
+            placeholder="xxx-xxxx-xxx"
+            onChange={(event) => {
+              const input = event.currentTarget;
+
+              const lowerCased = input.value.toLowerCase();
+              if (input.value !== lowerCased) {
+                const { selectionStart, selectionEnd } = input;
+                input.setRangeText(lowerCased, 0, lowerCased.length);
+                input.setSelectionRange(selectionStart, selectionEnd);
+              }
+
+              if (event.nativeEvent instanceof InputEvent) fixDashes(input, event.nativeEvent);
+              checkToken(input, intl);
+            }}
           />
         </label>
 
@@ -110,4 +131,108 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
       </form>
     </section>
   );
+}
+
+function fixDashes(input: HTMLInputElement, event: InputEvent) {
+  if (!event.inputType.includes("insert")) return; // Ignore deletions and other changes
+  if (input.selectionStart !== input.value.length) return; // Ignore changes in the middle
+
+  const { value } = input;
+
+  let fixStart = 0;
+  let fixPart = 0;
+
+  for (;;) {
+    const index = value.substring(fixStart).indexOf("-");
+
+    if (fixPart === partDefinitions.length - 1) {
+      if (index !== -1) return; // Stop if unexpected extra dash
+      break;
+    } else {
+      if (index === -1) break; // Ok, possibly something to fix
+      if (index !== partDefinitions[fixPart].length) return; // Stop if misplaced dash
+
+      fixStart += index + 1;
+      fixPart += 1;
+    }
+  }
+
+  for (; fixPart < partDefinitions.length - 1; fixPart += 1) {
+    const dashIndex = partDefinitions[fixPart].end;
+    if (input.value.length < dashIndex) break; // Not long enough to insert next dash
+    input.setRangeText("-", dashIndex, dashIndex);
+  }
+
+  input.setSelectionRange(input.value.length, input.value.length, "none");
+}
+
+function checkToken(input: HTMLInputElement, intl: IntlShape) {
+  const characters = Array.from(input.value).map((c, i) => ({ c, i }));
+  const invalidCharacters = characters.filter(({ c }) => c !== "-" && !alphabet.includes(c));
+  const dashes = characters.filter(({ c }) => c === "-").map(({ i }) => i);
+
+  let errors: string[] = [];
+
+  if (invalidCharacters.length > 0) {
+    errors.push(
+      intl.formatMessage(
+        defineMessage({
+          defaultMessage: `Token contains unexpected characters: {characters}.`,
+          id: `token-invalid-characters-error`,
+        }),
+        { characters: invalidCharacters.map(({ c }) => `'${c}'`).join(", ") }
+      )
+    );
+  }
+
+  const expectedLength = partDefinitions[partDefinitions.length - 1].end;
+
+  if (characters.length < expectedLength) {
+    errors.push(
+      intl.formatMessage(defineMessage({ defaultMessage: `Token is too short.`, id: `token-too-short-error` }))
+    );
+  }
+
+  if (characters.length > expectedLength) {
+    errors.push(
+      intl.formatMessage(defineMessage({ defaultMessage: `Token is too long.`, id: `token-too-long-error` }))
+    );
+  }
+
+  if (dashes.length > dashesIndexes.length) {
+    errors.push(
+      intl.formatMessage(
+        defineMessage({ defaultMessage: `Token contains an extra dash (-).`, id: `token-extra-dash-error` })
+      )
+    );
+  }
+
+  if (dashes.length < dashesIndexes.length) {
+    errors.push(
+      intl.formatMessage(
+        defineMessage({ defaultMessage: `Token is missing a dash (-).`, id: `token-missing-dash-error` })
+      )
+    );
+  }
+
+  if (dashes.some((i, j) => dashesIndexes[j] !== i)) {
+    errors.push(
+      intl.formatMessage(
+        defineMessage({ defaultMessage: `Token contains a misplaced dash (-).`, id: `token-misplaced-dash-error` })
+      )
+    );
+  }
+
+  if (errors.length === 0) {
+    const digits = characters.filter(({ c }) => c !== "-").map(({ c }) => c);
+    const checkDigit = computeCheckDigit(digits.slice(0, -1));
+
+    if (digits.at(-1) !== checkDigit) {
+      errors.push(
+        intl.formatMessage(defineMessage({ defaultMessage: `Token contains an error.`, id: `token-check-digit-error` }))
+      );
+    }
+  }
+
+  input.setCustomValidity(errors.join(" "));
 }
