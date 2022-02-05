@@ -1,28 +1,56 @@
 import { css } from "@emotion/css";
 import { defineMessage } from "@formatjs/intl";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { alphabet, computeCheckDigit, dashesIndexes, partDefinitions, patternString } from "./token";
 
-type TokenState = {
-  token: string | null;
-  setToken: (token: string | null) => void;
-};
+export function useTokenState() {
+  const [unsavedToken, setUnsavedToken] = useState(() => {
+    return new URLSearchParams(window.location.search).get("t") ?? sessionStorage.getItem("token");
+  });
 
-export function useTokenState(): TokenState {
   const [token, setToken] = useState(() => {
     try {
-      return localStorage.getItem("token");
+      const value = localStorage.getItem("token");
+      return unsavedToken === null || value === unsavedToken ? value : null;
     } catch {
       return null;
     }
   });
-  return { token, setToken };
+
+  useEffect(() => {
+    window.history.replaceState(undefined, "", "?");
+  }, []);
+
+  return {
+    unsavedToken,
+    setUnsavedToken: useCallback((value: string) => {
+      setUnsavedToken(value || null);
+      try {
+        if (value === null) sessionStorage.removeItem("token");
+        else sessionStorage.setItem("token", value);
+      } catch {
+        // No-op
+      }
+    }, []),
+    token,
+    setToken: useCallback((value: string | null) => {
+      setToken(value);
+      try {
+        if (value === null) localStorage.removeItem("token");
+        else localStorage.setItem("token", value);
+      } catch {
+        // No-op
+      }
+    }, []),
+  };
 }
+
+export type TokenState = ReturnType<typeof useTokenState>;
 
 export function TokenForm({ tokenState }: { tokenState: TokenState }) {
   const intl = useIntl();
-  const { token, setToken } = tokenState;
+  const { unsavedToken, setUnsavedToken, token, setToken } = tokenState;
 
   return (
     <section
@@ -43,11 +71,12 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
         onSubmit={(event) => {
           event.preventDefault();
           const input = event.currentTarget.elements.namedItem("token") as HTMLInputElement;
-          setToken(input.value);
-          try {
-            localStorage.setItem("token", input.value);
-          } catch {
-            // No-op
+          checkToken(input, intl);
+          if (event.currentTarget.checkValidity()) {
+            setToken(input.value);
+            setUnsavedToken(input.value);
+          } else {
+            event.currentTarget.reportValidity();
           }
         }}
       >
@@ -76,19 +105,12 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
             pattern={patternString}
             required
             id="token"
-            defaultValue={token ?? ""}
+            defaultValue={token ?? unsavedToken ?? ""}
             type={token ? "password" : "text"}
             placeholder="xxx-xxxx-xxx"
             onChange={(event) => {
               const input = event.currentTarget;
-
-              const lowerCased = input.value.toLowerCase();
-              if (input.value !== lowerCased) {
-                const { selectionStart, selectionEnd } = input;
-                input.setRangeText(lowerCased, 0, lowerCased.length);
-                input.setSelectionRange(selectionStart, selectionEnd);
-              }
-
+              setUnsavedToken(input.value);
               if (event.nativeEvent instanceof InputEvent) fixDashes(input, event.nativeEvent);
               checkToken(input, intl);
             }}
@@ -118,11 +140,6 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
             disabled={token === null}
             onClick={() => {
               setToken(null);
-              try {
-                return localStorage.removeItem("token");
-              } catch {
-                // No-op
-              }
             }}
           >
             <FormattedMessage defaultMessage="Change token" id="token-change-label" />
@@ -167,6 +184,13 @@ function fixDashes(input: HTMLInputElement, event: InputEvent) {
 }
 
 function checkToken(input: HTMLInputElement, intl: IntlShape) {
+  const lowerCased = input.value.toLowerCase();
+  if (input.value !== lowerCased) {
+    const { selectionStart, selectionEnd } = input;
+    input.setRangeText(lowerCased, 0, lowerCased.length);
+    input.setSelectionRange(selectionStart, selectionEnd);
+  }
+
   const characters = Array.from(input.value).map((c, i) => ({ c, i }));
   const invalidCharacters = characters.filter(({ c }) => c !== "-" && !alphabet.includes(c));
   const dashes = characters.filter(({ c }) => c === "-").map(({ i }) => i);

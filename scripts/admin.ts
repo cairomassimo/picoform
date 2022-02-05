@@ -27,7 +27,7 @@ program
   .command("block-submit")
   .description("Allows users to submit")
   .action(async () => {
-    await admin.firestore().doc("config/main").set({ canAnswer: true }, { merge: true });
+    await admin.firestore().doc("config/main").set({ canAnswer: false }, { merge: true });
   });
 
 program

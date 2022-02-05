@@ -50,6 +50,8 @@
 
     (or use the Firebase web console) to create a web app.
 
+    TODO: may need `npx firebase login --reauth`
+
 7.  Retreive and save web SDK config
 
     Run the commands
@@ -67,19 +69,19 @@
     npm run build
     ```
 
-9.  Deploy
+9.  Enable Firestore
+
+    From the Firebase Web console (TODO).
+
+10. Enable Anonymous Authentication on Firebase
+
+    From the Firebase Web console (TODO).
+
+11. Deploy
 
     ```
     npx firebase deploy
     ```
-
-10. Enable Firestore
-
-    From the Firebase Web console (TODO).
-
-11. Enable Anonymous Authentication on Firebase
-
-    From the Firebase Web console (TODO).
 
 12. Create a private key for admin
 
@@ -125,5 +127,5 @@
 17. Download and save all submissions
 
     ```
-    GOOGLE_APPLICATION_CREDENTIALS="./firebase-admin-private-key.json" npx ts-node scripts/admin.ts get-submissions > submissions.json
+    GOOGLE_APPLICATION_CREDENTIALS="./firebase-admin-private-key.json" npx ts-node scripts/admin.ts get-submissions > submissions.jsonl
     ```

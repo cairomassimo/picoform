@@ -97,7 +97,9 @@ export function SubmissionForm({
                   font-weight: bold;
                 `}
                 disabled={nextSubmissionState !== null}
-                pattern="-?\d+"
+                /* TODO: set custom validity with user-friendly error message. */
+                /* Strictly-positive integers with <= 50 digits */
+                pattern="[1-9][0-9]{0,49}"
                 defaultValue={lastSubmission?.answers?.[i] ?? ""}
                 placeholder={lastSubmission?.answers?.[i] ?? ""}
                 id={`a${i + 1}`}
