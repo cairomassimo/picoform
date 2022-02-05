@@ -5,6 +5,7 @@ import { useAppConfig } from "./config";
 import { SubmissionPanel } from "./submission-panel";
 import { TokenForm, useTokenState } from "./token-form";
 import { Helmet } from "react-helmet";
+import { AnnouncementList } from "./announcement-list";
 
 export const previousAnswersLimit = 10;
 
@@ -16,6 +17,7 @@ export function Main() {
 
   const numberOfQuestions = config?.numberOfQuestions;
   const title = config?.title ?? `Contest`;
+  const announcements = config?.announcements ?? [];
 
   return (
     <div
@@ -33,6 +35,7 @@ export function Main() {
       {(!user || !config) && <FormattedMessage defaultMessage="Loading..." id="loading" />}
       {user && config && (
         <>
+          <AnnouncementList announcements={announcements} />
           {numberOfQuestions === undefined && <FormattedMessage defaultMessage="Not configured." id="not-configured" />}
           {numberOfQuestions !== undefined && (
             <>

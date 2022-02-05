@@ -1,7 +1,6 @@
-import { program } from "commander";
+import { Option, program } from "commander";
 import admin from "firebase-admin";
 import { applicationDefault } from "firebase-admin/app";
-import { Query } from "firebase-admin/firestore";
 import { Submission } from "../src/submission";
 
 admin.initializeApp({
@@ -25,7 +24,7 @@ program
 
 program
   .command("block-submit")
-  .description("Allows users to submit")
+  .description("Disallow users to submit")
   .action(async () => {
     await admin.firestore().doc("config/main").set({ canAnswer: false }, { merge: true });
   });
@@ -35,6 +34,28 @@ program
   .description("Set the title of the form")
   .action(async (title: string) => {
     await admin.firestore().doc("config/main").set({ title }, { merge: true });
+  });
+
+program
+  .command("add-announcement <title> <content>")
+  .addOption(
+    new Option("-s, --severity <severity>", "Severity of the announcement")
+      .choices(["info", "warning", "danger"])
+      .makeOptionMandatory(true)
+  )
+  .description("Add a new announcement")
+  .action(async (title: string, content: string, options: { severity: string }) => {
+    await admin
+      .firestore()
+      .doc("config/main")
+      .update({
+        announcements: admin.firestore.FieldValue.arrayUnion({
+          time: admin.firestore.Timestamp.now(),
+          title,
+          content,
+          severity: options.severity,
+        }),
+      });
   });
 
 program
