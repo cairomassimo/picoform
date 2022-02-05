@@ -23,7 +23,14 @@
   "submission-table-title": "Sottoposizioni recenti",
   "submissions-loading-message": "Caricamento...",
   "token-change-label": "Cambia il token",
+  "token-check-digit-error": "Il token ha un errore.",
+  "token-extra-dash-error": "Il token contiene un trattino (-) di troppo.",
   "token-form-title": "Imposta il tuo token",
   "token-input-label": "Il tuo token",
-  "token-submit-label": "Salva il token"
+  "token-invalid-characters-error": "Il token contiene caratteri non validi: {characters}.",
+  "token-misplaced-dash-error": "Il token contiene un trattino (-) fuori posto.",
+  "token-missing-dash-error": "Al token manca un trattino (-).",
+  "token-submit-label": "Salva il token",
+  "token-too-long-error": "Il token è troppo lungo.",
+  "token-too-short-error": "Il token è troppo corto."
 }

@@ -23,7 +23,14 @@
   "submission-table-title": "Recent submissions",
   "submissions-loading-message": "Loading...",
   "token-change-label": "Change token",
+  "token-check-digit-error": "Token contains an error.",
+  "token-extra-dash-error": "Token contains an extra dash (-).",
   "token-form-title": "Set your token",
   "token-input-label": "Your token",
-  "token-submit-label": "Set token"
+  "token-invalid-characters-error": "Token contains unexpected characters: {characters}.",
+  "token-misplaced-dash-error": "Token contains a misplaced dash (-).",
+  "token-missing-dash-error": "Token is missing a dash (-).",
+  "token-submit-label": "Set token",
+  "token-too-long-error": "Token is too long.",
+  "token-too-short-error": "Token is too short."
 }
