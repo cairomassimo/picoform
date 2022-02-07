@@ -17,18 +17,10 @@ export function Main() {
 
   const tokenState = useTokenState();
 
-  const numberOfQuestions = 20 // config?.numberOfQuestions;
-  const canAnswer = true; // config.canAnswer ?? false;
-  const title = config?.title ?? `OII - Fase scolastica`;
-  const announcements = config?.announcements ?? [/*{
-    title: "Danger",
-    content: "fai schifo",
-    severity: "danger",
-  }, {
-    title: "Info",
-    content: "glhf",
-    severity: "info",
-  }*/];
+  const numberOfQuestions = config?.numberOfQuestions;
+  const canAnswer = config?.canAnswer ?? false;
+  const title = config?.title ?? `Contest`;
+  const announcements = config?.announcements ?? [];
 
   return (
     <>
@@ -37,7 +29,7 @@ export function Main() {
         <link rel="icon" href="/favicon.ico" />
       </Helmet>
 
-      <Navbar bg="light">
+      <Navbar bg="light" expand="lg" className="mb-3">
         <Container>
           <Navbar.Brand>
             <img src="/logo.png" alt="" width="32" height="32" className="d-inline-block me-3" />

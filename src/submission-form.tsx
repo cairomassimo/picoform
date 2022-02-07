@@ -59,7 +59,7 @@ export function SubmissionForm({
         );
       }}
     >
-      <Container>
+      <Container className="p-0">
         <Row xs="1" sm="2" md="3" lg="4" xxl="5">
           {Array.from({ length: numberOfQuestions }, (unused, i) => (
             <Col className="mb-3" key={i}>
@@ -81,49 +81,58 @@ export function SubmissionForm({
             </Col>
           ))}
         </Row>
+        <Row>
+          <div className="mb-3">
+            {!nextSubmissionState && pristine && (
+              <FormattedMessage defaultMessage="No answer was changed" id="submission-status-pristine" />
+            )}
+            {!nextSubmissionState && !pristine && (
+              <FormattedMessage defaultMessage="Answers NOT saved yet" id="submission-status-unsubmitted" />
+            )}
+            {nextSubmissionState?.status === "pending" && (
+              <FormattedMessage defaultMessage="Saving answers..." id="submission-status-pending-message" />
+            )}
+            {nextSubmissionState?.status === "success" && (
+              <FormattedMessage defaultMessage="Answers saved!" id="submission-status-success-message" />
+            )}
+            {nextSubmissionState?.status === "error" && (
+              <FormattedMessage
+                defaultMessage="An error occurred. Answers NOT saved."
+                id="submission-status-error-message"
+              />
+            )}
+          </div>
+        </Row>
+        <Row>
+          <div className="d-flex justify-content-center">
+            <div>
+              <Button
+                className="me-3 mb-3"
+                disabled={nextSubmissionState !== null}
+                type="submit"
+              >
+                <FormattedMessage defaultMessage="Save answers" id="answers-submit-label" />
+              </Button>
+              <Button
+                className="me-3 mb-3"
+                variant="outline-primary"
+                type="button"
+                onClick={(event) => {
+                  setNextSubmissionState(null);
+                  event.currentTarget.form!.reset();
+                }}
+                disabled={!nextSubmissionState}
+              >
+                {nextSubmissionState?.status === "error" ? (
+                  <FormattedMessage defaultMessage="Try again" id="answers-retry-label" />
+                ) : (
+                  <FormattedMessage defaultMessage="Change answers" id="answers-change-label" />
+                )}
+              </Button>
+            </div>
+          </div>
+        </Row>
       </Container>
-      <div className="d-flex justify-content-center mb-3 gap-3">
-        <Button
-          disabled={nextSubmissionState !== null}
-          type="submit"
-        >
-          <FormattedMessage defaultMessage="Save answers" id="answers-submit-label" />
-        </Button>
-        <Button
-          type="button"
-          onClick={(event) => {
-            setNextSubmissionState(null);
-            event.currentTarget.form!.reset();
-          }}
-          disabled={!nextSubmissionState}
-        >
-          {nextSubmissionState?.status === "error" ? (
-            <FormattedMessage defaultMessage="Try again" id="answers-retry-label" />
-          ) : (
-            <FormattedMessage defaultMessage="Change answers" id="answers-change-label" />
-          )}
-        </Button>
-      </div>
-      <div>
-        {!nextSubmissionState && pristine && (
-          <FormattedMessage defaultMessage="No answer was changed" id="submission-status-pristine" />
-        )}
-        {!nextSubmissionState && !pristine && (
-          <FormattedMessage defaultMessage="Answers NOT saved yet" id="submission-status-unsubmitted" />
-        )}
-        {nextSubmissionState?.status === "pending" && (
-          <FormattedMessage defaultMessage="Saving answers..." id="submission-status-pending-message" />
-        )}
-        {nextSubmissionState?.status === "success" && (
-          <FormattedMessage defaultMessage="Answers saved!" id="submission-status-success-message" />
-        )}
-        {nextSubmissionState?.status === "error" && (
-          <FormattedMessage
-            defaultMessage="An error occurred. Answers NOT saved."
-            id="submission-status-error-message"
-          />
-        )}
-      </div>
     </Form>
   );
 }

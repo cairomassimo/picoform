@@ -2,7 +2,7 @@ import { defineMessage } from "@formatjs/intl";
 import { useCallback, useEffect, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { alphabet, computeCheckDigit, dashesIndexes, partDefinitions, patternString } from "./token";
-import {Button, Form} from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 export function useTokenState() {
   const [unsavedToken, setUnsavedToken] = useState(() => {
@@ -53,7 +53,7 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
   const { unsavedToken, setUnsavedToken, token, setToken } = tokenState;
 
   return (
-    <div>
+    <div className="mb-5">
       <h2>
         <FormattedMessage defaultMessage="Set your token" id="token-form-title" />
       </h2>
@@ -71,47 +71,54 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
         }}
       >
         <Form.Group className="mb-3">
-          <Form.Label>
-            <FormattedMessage defaultMessage="Your token" id="token-input-label" />
-          </Form.Label>
-          <Form.Control
-            autoComplete="off"
-            autoCapitalize="off"
-            spellCheck="false"
-            enterKeyHint="done"
-            className="font-monospace"
-            // size={12}
-            disabled={token !== null}
-            pattern={patternString}
-            required
-            id="token"
-            defaultValue={token ?? unsavedToken ?? ""}
-            type={token ? "password" : "text"}
-            placeholder="xxx-xxxx-xxx"
-            onChange={(event) => {
-              const input = event.currentTarget;
-              setUnsavedToken(input.value);
-              if (event.nativeEvent instanceof InputEvent) fixDashes(input, event.nativeEvent);
-              checkToken(input, intl);
-            }}
-          />
+          <Container className="p-0">
+            <Row>
+              <Col xs="12" md="8" lg="6" xl="5">
+                <Form.Label>
+                  <FormattedMessage defaultMessage="Your token" id="token-input-label" />
+                </Form.Label>
+                <Form.Control
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  spellCheck="false"
+                  enterKeyHint="done"
+                  className="font-monospace mb-3"
+                  // FIXME: questa riga non funziona e non so a cosa servisse ¯\_(ツ)_/¯
+                  // size={12}
+                  disabled={token !== null}
+                  pattern={patternString}
+                  required
+                  id="token"
+                  defaultValue={token ?? unsavedToken ?? ""}
+                  type={token ? "password" : "text"}
+                  placeholder="xxx-xxxx-xxx"
+                  onChange={(event) => {
+                    const input = event.currentTarget;
+                    setUnsavedToken(input.value);
+                    if (event.nativeEvent instanceof InputEvent) fixDashes(input, event.nativeEvent);
+                    checkToken(input, intl);
+                  }}
+                />
+              </Col>
+            </Row>
+            <Button
+              className="me-3 mb-3"
+              type="submit"
+              disabled={token !== null}
+            >
+              <FormattedMessage defaultMessage="Set token" id="token-submit-label" />
+            </Button>
+            <Button
+              className="me-3 mb-3"
+              variant="outline-primary"
+              type="button"
+              disabled={token === null}
+              onClick={() => { setToken(null); }}
+            >
+              <FormattedMessage defaultMessage="Change token" id="token-change-label" />
+           </Button>
+          </Container>
         </Form.Group>
-
-        <div className="d-flex justify-content-center mb-3 gap-3">
-          <Button
-            type="submit"
-            disabled={token !== null}
-          >
-            <FormattedMessage defaultMessage="Set token" id="token-submit-label" />
-          </Button>
-          <Button
-            type="button"
-            disabled={token === null}
-            onClick={() => { setToken(null); }}
-          >
-            <FormattedMessage defaultMessage="Change token" id="token-change-label" />
-          </Button>
-        </div>
       </Form>
     </div>
   );

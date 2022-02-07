@@ -3,6 +3,7 @@ import { FormattedMessage } from "react-intl";
 import { SubmissionForm } from "./submission-form";
 import { useSubmissions } from "./submission-list";
 import { SubmissionTable } from "./submission-table";
+import {Timestamp} from "@firebase/firestore";
 
 export function SubmissionPanel({
   numberOfQuestions,
@@ -15,7 +16,21 @@ export function SubmissionPanel({
   user: User;
   token: string;
 }) {
-  const submissions = useSubmissions(user, token);
+  const submissions = [
+    {
+      time: new Timestamp(1e9, 0),
+      uid: "42",
+      token: "42",
+      answers: ["1", "2", "3", "4", "5", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+    },
+    {
+      time: new Timestamp(2e9, 0),
+      uid: "42",
+      token: "42",
+      answers: ["1", "2", "3", "4", "5", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+    }
+  ]
+  // const submissions = useSubmissions(user, token);
   const lastSubmission = submissions && submissions.length > 0 ? submissions[0] : null;
 
   return (
@@ -23,7 +38,7 @@ export function SubmissionPanel({
       {!submissions && <FormattedMessage defaultMessage="Loading..." id="submissions-loading-message" />}
       {submissions && (
         <>
-          <div>
+          <div className="mb-5">
             <h2>
               <FormattedMessage defaultMessage="Send your answers" id="submission-form-title" />
             </h2>

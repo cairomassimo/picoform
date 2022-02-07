@@ -1,6 +1,7 @@
 import { FormattedMessage, FormattedTime } from "react-intl";
 import { Submission } from "./submission";
-import { Alert, Button, Col, Container, Row } from "react-bootstrap";
+import {Accordion, Alert, Button, ListGroup, Modal, Row} from "react-bootstrap";
+import {useState} from "react";
 
 export function SubmissionTable({
   submissions,
@@ -10,7 +11,7 @@ export function SubmissionTable({
   numberOfQuestions: number;
 }) {
   return (
-    <div>
+    <div className="mb-5">
       <h2>
         <FormattedMessage defaultMessage="Recent submissions" id="submission-table-title" />
       </h2>
@@ -19,78 +20,36 @@ export function SubmissionTable({
           <FormattedMessage defaultMessage="No answers submitted." id="submission-table-empty-message" />
         </div>
       )}
-      {/* <div>
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  <FormattedMessage defaultMessage="Saved at" id="submission-table-time-header" />
-                </th>
-                <th>
-                  <FormattedMessage defaultMessage="Answers" id="submission-table-answers-header" />
-                </th>
-              </tr>
-              <tr>
-                {Array.from({ length: numberOfQuestions }, (unused, i) => (
-                  <th>
-                    Q{i + 1}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {submissions.map((x, submissionIndex) => (
-                <tr>
-                  <th>
-                    {x.time === null && (
-                      <FormattedMessage defaultMessage="Saving..." id="submission-table-pending-message" />
-                    )}
-                    {x.time !== null && (
-                      <FormattedTime
-                        value={x.time.toDate()}
-                        dateStyle="medium"
-                        timeStyle="medium"
-                        fractionalSecondDigits={3}
-                      />
-                    )}
-                  </th>
-                  {Array.from({ length: numberOfQuestions }, (unused, i) => (
-                    <td key={i} >
-                      <output>
-                        {(x.answers[i] ?? "") || <i>-</i>}
-                      </output>
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div> */}
       {submissions.length > 0 && (
-        <Container className="mb-3">
+        <Accordion className="mb-3 p-0">
           {submissions.map((x, submissionIndex) => (
-            <Row className="mb-3">
-              <Col>
+            <Accordion.Item eventKey={submissionIndex.toString()} key={submissionIndex}>
+              <Accordion.Header>
                 {x.time === null && (
-                  <FormattedMessage defaultMessage="Saving..." id="submission-table-pending-message" />
+                    <FormattedMessage defaultMessage="Saving..." id="submission-table-pending-message" />
                 )}
                 {x.time !== null && (
-                  <FormattedTime
-                    value={x.time.toDate()}
-                    dateStyle="medium"
-                    timeStyle="medium"
-                    fractionalSecondDigits={3}
-                  />
+                    <FormattedTime
+                      value={x.time.toDate()}
+                      dateStyle="medium"
+                      timeStyle="medium"
+                      fractionalSecondDigits={3}
+                    />
                 )}
-              </Col>
-              <Col>
-                <Button>
-                  Mostra
-                </Button>
-              </Col>
-            </Row>
+              </Accordion.Header>
+              <Accordion.Body>
+                <ListGroup variant="flush">
+                  {x.answers.map((answer, index) => (
+                    <ListGroup.Item className="d-flex justify-content-between" key={index}>
+                      <div className="w-50">Quesito {index}:</div>
+                      <div className="w-50">{answer}</div>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              </Accordion.Body>
+            </Accordion.Item>
           ))}
-        </Container>
+        </Accordion>
       )}
       <Alert variant="info">
         <FormattedMessage
