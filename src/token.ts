@@ -20,5 +20,5 @@ export const dashesIndexes = [3, 8];
 export const patternString = `^${partDefinitions.map((x) => `${digitPatternString}{${x.length}}`).join("-")}$`;
 
 export function computeCheckDigit(characters: string[]) {
-  return alphabet.at(characters.reduce((acc, x, i) => (acc + valueMap[x] * (i + 1)) % size, 0));
+  return alphabet[characters.reduce((acc, x, i) => (acc + valueMap[x] * (i + 1)) % size, 0)];
 }
