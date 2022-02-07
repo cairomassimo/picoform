@@ -1,6 +1,6 @@
-import { css, cx } from "@emotion/css";
 import { FormattedMessage, FormattedTime } from "react-intl";
 import { Submission } from "./submission";
+import { Alert, Button, Col, Container, Row } from "react-bootstrap";
 
 export function SubmissionTable({
   submissions,
@@ -10,69 +10,29 @@ export function SubmissionTable({
   numberOfQuestions: number;
 }) {
   return (
-    <section
-      className={css`
-        margin: 1rem 0;
-      `}
-    >
+    <div>
       <h2>
         <FormattedMessage defaultMessage="Recent submissions" id="submission-table-title" />
       </h2>
       {submissions.length === 0 && (
-        <FormattedMessage defaultMessage="No answers submitted." id="submission-table-empty-message" />
+        <div className="mb-3">
+          <FormattedMessage defaultMessage="No answers submitted." id="submission-table-empty-message" />
+        </div>
       )}
-      {submissions.length > 0 && (
-        <div
-          className={css`
-            display: flex;
-            flex-flow: column;
-            overflow: auto;
-            margin: 0 -1rem;
-            padding: 0 1rem;
-          `}
-        >
-          <table
-            className={css`
-              table-layout: fixed;
-              border-collapse: collapse;
-            `}
-          >
-            <thead
-              className={css`
-                border-bottom: 2px solid black;
-                background: rgb(0 0 0 / 5%);
-              `}
-            >
+      {/* <div>
+          <table>
+            <thead>
               <tr>
-                <th
-                  className={css`
-                    padding: 0.5rem;
-                    text-align: left;
-                    vertical-align: bottom;
-                  `}
-                  rowSpan={2}
-                >
+                <th>
                   <FormattedMessage defaultMessage="Saved at" id="submission-table-time-header" />
                 </th>
-                <th
-                  className={css`
-                    text-align: left;
-                    padding: 0.5rem;
-                  `}
-                  colSpan={numberOfQuestions}
-                >
+                <th>
                   <FormattedMessage defaultMessage="Answers" id="submission-table-answers-header" />
                 </th>
               </tr>
               <tr>
                 {Array.from({ length: numberOfQuestions }, (unused, i) => (
-                  <th
-                    className={css`
-                      padding: 0.5rem;
-                      text-align: right;
-                    `}
-                    key={i}
-                  >
+                  <th>
                     Q{i + 1}
                   </th>
                 ))}
@@ -80,32 +40,8 @@ export function SubmissionTable({
             </thead>
             <tbody>
               {submissions.map((x, submissionIndex) => (
-                <tr
-                  className={css`
-                    td {
-                      padding: 0.25rem 0.5rem;
-                      font-weight: bold;
-                      text-align: right;
-                    }
-
-                    td.redundant-answer {
-                      font-weight: unset;
-                      color: rgb(0 0 0 / 60%);
-                    }
-
-                    &:nth-child(2n) {
-                      background: rgb(0 0 0 / 5%);
-                    }
-                  `}
-                  key={submissionIndex}
-                >
-                  <th
-                    className={css`
-                      padding: 0.25rem 0.5rem;
-                      white-space: nowrap;
-                      text-align: left;
-                    `}
-                  >
+                <tr>
+                  <th>
                     {x.time === null && (
                       <FormattedMessage defaultMessage="Saving..." id="submission-table-pending-message" />
                     )}
@@ -119,17 +55,8 @@ export function SubmissionTable({
                     )}
                   </th>
                   {Array.from({ length: numberOfQuestions }, (unused, i) => (
-                    <td
-                      className={cx(
-                        "answer",
-                        submissionIndex > 0 &&
-                          x.answers[i] === submissions[submissionIndex - 1].answers[i] &&
-                          "redundant-answer"
-                      )}
-                      key={i}
-                    >
+                    <td key={i} >
                       <output>
-                        {/* TODO: highlight answers that differ from previous  */}
                         {(x.answers[i] ?? "") || <i>-</i>}
                       </output>
                     </td>
@@ -138,9 +65,34 @@ export function SubmissionTable({
               ))}
             </tbody>
           </table>
-        </div>
+        </div> */}
+      {submissions.length > 0 && (
+        <Container className="mb-3">
+          {submissions.map((x, submissionIndex) => (
+            <Row className="mb-3">
+              <Col>
+                {x.time === null && (
+                  <FormattedMessage defaultMessage="Saving..." id="submission-table-pending-message" />
+                )}
+                {x.time !== null && (
+                  <FormattedTime
+                    value={x.time.toDate()}
+                    dateStyle="medium"
+                    timeStyle="medium"
+                    fractionalSecondDigits={3}
+                  />
+                )}
+              </Col>
+              <Col>
+                <Button>
+                  Mostra
+                </Button>
+              </Col>
+            </Row>
+          ))}
+        </Container>
       )}
-      <p>
+      <Alert variant="info">
         <FormattedMessage
           defaultMessage={`
 NB: only the answers submitted <strong>from this browser</strong> are shown here.
@@ -148,7 +100,7 @@ NB: only the answers submitted <strong>from this browser</strong> are shown here
 `}
           id="submission-footer-warning"
         />
-      </p>
-    </section>
+      </Alert>
+    </div>
   );
 }

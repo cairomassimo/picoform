@@ -1,4 +1,3 @@
-import { css } from "@emotion/css";
 import { FormattedMessage } from "react-intl";
 import { useAnonymousUser } from "./auth";
 import { useAppConfig } from "./config";
@@ -6,6 +5,8 @@ import { SubmissionPanel } from "./submission-panel";
 import { TokenForm, useTokenState } from "./token-form";
 import { Helmet } from "react-helmet";
 import { AnnouncementList } from "./announcement-list";
+
+import { Container, Form, Navbar } from "react-bootstrap";
 
 export const previousAnswersLimit = 10;
 
@@ -15,43 +16,62 @@ export function Main() {
 
   const tokenState = useTokenState();
 
-  const numberOfQuestions = config?.numberOfQuestions;
-  const title = config?.title ?? `Contest`;
-  const announcements = config?.announcements ?? [];
+  const numberOfQuestions = 20 // config?.numberOfQuestions;
+  const canAnswer = true; // config.canAnswer ?? false;
+  const title = config?.title ?? `OII - Fase scolastica`;
+  const announcements = config?.announcements ?? [/*{
+    title: "Danger",
+    content: "fai schifo",
+    severity: "danger",
+  }, {
+    title: "Info",
+    content: "glhf",
+    severity: "info",
+  }*/];
 
   return (
-    <div
-      className={css`
-        display: flex;
-        flex-flow: column;
-        max-width: 80rem;
-        margin: 0 auto;
-      `}
-    >
-      <h1>{title}</h1>
+    <>
       <Helmet>
         <title>{title}</title>
+        <link rel="icon" href="/favicon.ico" />
       </Helmet>
-      {(!user || !config) && <FormattedMessage defaultMessage="Loading..." id="loading" />}
-      {user && config && (
-        <>
-          <AnnouncementList announcements={announcements} />
-          {numberOfQuestions === undefined && <FormattedMessage defaultMessage="Not configured." id="not-configured" />}
-          {numberOfQuestions !== undefined && (
-            <>
-              <TokenForm tokenState={tokenState} />
-              {tokenState.token !== null && (
-                <SubmissionPanel
-                  canAnswer={config.canAnswer ?? false}
-                  numberOfQuestions={numberOfQuestions}
-                  user={user}
-                  token={tokenState.token}
-                />
-              )}
-            </>
-          )}
-        </>
-      )}
-    </div>
+
+      <Navbar bg="light">
+        <Container>
+          <Navbar.Brand>
+            <img src="/logo.png" alt="" width="32" height="32" className="d-inline-block me-3" />
+            <span> {title} </span>
+          </Navbar.Brand>
+          <Form.Select className="w-auto">
+            <option value="" label="Auto (Italiano)" />
+            <option value="en" label="English - inglese" />
+            <option value="it" label="Italiano" />
+          </Form.Select>
+        </Container>
+      </Navbar>
+
+      <Container>
+        {(!user || !config) && <FormattedMessage defaultMessage="Loading..." id="loading" />}
+        {user && config && (
+          <>
+            <AnnouncementList announcements={announcements} />
+            {numberOfQuestions === undefined && <FormattedMessage defaultMessage="Not configured." id="not-configured" />}
+            {numberOfQuestions !== undefined && (
+              <>
+                <TokenForm tokenState={tokenState} />
+                {tokenState.token !== null && (
+                  <SubmissionPanel
+                    canAnswer={canAnswer}
+                    numberOfQuestions={numberOfQuestions}
+                    user={user}
+                    token={tokenState.token}
+                  />
+                )}
+              </>
+            )}
+          </>
+        )}
+      </Container>
+    </>
   );
 }

@@ -6,13 +6,13 @@ export function AnnouncementList({ announcements }: { announcements: Announcemen
   if (announcements.length === 0) return null;
 
   return (
-    <section>
+    <div>
       <h2>
         <FormattedMessage defaultMessage="Announcements" id="announcements" />
       </h2>
       {announcements.map((announcement) => (
         <AnnouncementCard announcement={announcement} key={announcement.time?.toString()} />
       ))}
-    </section>
+    </div>
   );
 }

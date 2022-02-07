@@ -1,5 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { defineMessage, IntlProvider, MessageDescriptor, useIntl } from "react-intl";
+import { Form } from "react-bootstrap";
+
 import en from "./intl/en.json";
 import it from "./intl/it.json";
 
@@ -47,7 +49,7 @@ function LanguageSelector({
   const intl = useIntl();
 
   return (
-    <select
+    <Form.Select
       onChange={(event) => {
         onChange((event.currentTarget.value || null) as SupportedLanguage | null);
       }}
@@ -61,7 +63,7 @@ function LanguageSelector({
       {supportedLanguages.map((language) => (
         <option key={language} value={language} label={intl.formatMessage(languageNames[language])} />
       ))}
-    </select>
+    </Form.Select>
   );
 }
 

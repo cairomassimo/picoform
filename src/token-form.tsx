@@ -1,8 +1,8 @@
-import { css } from "@emotion/css";
 import { defineMessage } from "@formatjs/intl";
 import { useCallback, useEffect, useState } from "react";
 import { FormattedMessage, IntlShape, useIntl } from "react-intl";
 import { alphabet, computeCheckDigit, dashesIndexes, partDefinitions, patternString } from "./token";
+import {Button, Form} from "react-bootstrap";
 
 export function useTokenState() {
   const [unsavedToken, setUnsavedToken] = useState(() => {
@@ -53,21 +53,11 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
   const { unsavedToken, setUnsavedToken, token, setToken } = tokenState;
 
   return (
-    <section
-      className={css`
-        margin: 1rem 0;
-      `}
-    >
+    <div>
       <h2>
         <FormattedMessage defaultMessage="Set your token" id="token-form-title" />
       </h2>
-      <form
-        className={css`
-          display: flex;
-          width: fit-content;
-          flex-flow: column;
-          gap: 1rem;
-        `}
+      <Form
         onSubmit={(event) => {
           event.preventDefault();
           const input = event.currentTarget.elements.namedItem("token") as HTMLInputElement;
@@ -80,27 +70,17 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
           }
         }}
       >
-        <label
-          className={css`
-            display: flex;
-            flex-flow: column;
-          `}
-          htmlFor="token"
-        >
-          <FormattedMessage defaultMessage="Your token" id="token-input-label" />
-
-          <input
+        <Form.Group className="mb-3">
+          <Form.Label>
+            <FormattedMessage defaultMessage="Your token" id="token-input-label" />
+          </Form.Label>
+          <Form.Control
             autoComplete="off"
             autoCapitalize="off"
             spellCheck="false"
             enterKeyHint="done"
-            className={css`
-              padding: 0.5rem;
-              font-family: monospace;
-              font-size: 1.5rem;
-              font-weight: bold;
-            `}
-            size={12}
+            className="font-monospace"
+            // size={12}
             disabled={token !== null}
             pattern={patternString}
             required
@@ -115,42 +95,29 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
               checkToken(input, intl);
             }}
           />
-        </label>
+        </Form.Group>
 
-        <div
-          className={css`
-            display: flex;
-            gap: 1rem;
-          `}
-        >
-          <button
-            className={css`
-              flex: 1 0;
-              font-size: 1.5rem;
-              padding: 0.5rem 1rem;
-            `}
-            disabled={token !== null}
+        <div className="d-flex justify-content-center mb-3 gap-3">
+          <Button
             type="submit"
+            disabled={token !== null}
           >
             <FormattedMessage defaultMessage="Set token" id="token-submit-label" />
-          </button>
-
-          <button
+          </Button>
+          <Button
             type="button"
             disabled={token === null}
-            onClick={() => {
-              setToken(null);
-            }}
+            onClick={() => { setToken(null); }}
           >
             <FormattedMessage defaultMessage="Change token" id="token-change-label" />
-          </button>
+          </Button>
         </div>
-      </form>
-    </section>
+      </Form>
+    </div>
   );
 }
 
-function fixDashes(input: HTMLInputElement, event: InputEvent) {
+function fixDashes(input: HTMLInputElement | HTMLTextAreaElement, event: InputEvent) {
   if (!event.inputType.includes("insert")) return; // Ignore deletions and other changes
   if (input.selectionStart !== input.value.length) return; // Ignore changes in the middle
 
@@ -183,7 +150,7 @@ function fixDashes(input: HTMLInputElement, event: InputEvent) {
   input.setSelectionRange(input.value.length, input.value.length, "none");
 }
 
-function checkToken(input: HTMLInputElement, intl: IntlShape) {
+function checkToken(input: HTMLInputElement | HTMLTextAreaElement, intl: IntlShape) {
   const lowerCased = input.value.toLowerCase();
   if (input.value !== lowerCased) {
     const { selectionStart, selectionEnd } = input;

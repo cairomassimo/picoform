@@ -1,4 +1,3 @@
-import { css } from "@emotion/css";
 import { User } from "@firebase/auth";
 import { FormattedMessage } from "react-intl";
 import { SubmissionForm } from "./submission-form";
@@ -24,11 +23,7 @@ export function SubmissionPanel({
       {!submissions && <FormattedMessage defaultMessage="Loading..." id="submissions-loading-message" />}
       {submissions && (
         <>
-          <section
-            className={css`
-              margin: 1rem 0;
-            `}
-          >
+          <div>
             <h2>
               <FormattedMessage defaultMessage="Send your answers" id="submission-form-title" />
             </h2>
@@ -41,7 +36,7 @@ export function SubmissionPanel({
                 lastSubmission={lastSubmission}
               />
             )}
-          </section>
+          </div>
           <SubmissionTable submissions={submissions} numberOfQuestions={numberOfQuestions} />
         </>
       )}
