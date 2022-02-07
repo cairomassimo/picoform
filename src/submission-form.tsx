@@ -73,6 +73,7 @@ export function SubmissionForm({
                   /* TODO: set custom validity with user-friendly error message. */
                   /* Strictly-positive integers with <= 50 digits */
                   pattern="[1-9][0-9]{0,49}"
+                  aria-label={`Q${i + 1}`}
                   defaultValue={lastSubmission?.answers?.[i] ?? ""}
                   placeholder={lastSubmission?.answers?.[i] ?? ""}
                   id={`a${i + 1}`}
