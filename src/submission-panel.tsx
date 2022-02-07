@@ -16,21 +16,7 @@ export function SubmissionPanel({
   user: User;
   token: string;
 }) {
-  const submissions = [
-    {
-      time: new Timestamp(1e9, 0),
-      uid: "42",
-      token: "42",
-      answers: ["1", "2", "3", "4", "5", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-    },
-    {
-      time: new Timestamp(2e9, 0),
-      uid: "42",
-      token: "42",
-      answers: ["1", "2", "3", "4", "5", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-    }
-  ]
-  // const submissions = useSubmissions(user, token);
+  const submissions = useSubmissions(user, token);
   const lastSubmission = submissions && submissions.length > 0 ? submissions[0] : null;
 
   return (

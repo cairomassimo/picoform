@@ -25,6 +25,7 @@ export function SubmissionTable({
           {submissions.map((x, submissionIndex) => (
             <Accordion.Item eventKey={submissionIndex.toString()} key={submissionIndex}>
               <Accordion.Header>
+                <span className="me-3">#{submissions.length - submissionIndex}</span>
                 {x.time === null && (
                     <FormattedMessage defaultMessage="Saving..." id="submission-table-pending-message" />
                 )}
@@ -41,7 +42,10 @@ export function SubmissionTable({
                 <ListGroup variant="flush">
                   {x.answers.map((answer, index) => (
                     <ListGroup.Item className="d-flex justify-content-between" key={index}>
-                      <div className="w-50">Quesito {index}:</div>
+                      <div className="w-50">
+                        <FormattedMessage defaultMessage="Question" id="question" />
+                        &nbsp;{index + 1}:
+                      </div>
                       <div className="w-50">{answer}</div>
                     </ListGroup.Item>
                   ))}

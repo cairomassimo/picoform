@@ -65,7 +65,8 @@ export function SubmissionForm({
             <Col className="mb-3" key={i}>
               <Form.Group>
                 <Form.Label>
-                  Quesito {i + 1}
+                  <FormattedMessage defaultMessage="Question" id="question" />
+                  &nbsp;{i + 1}
                 </Form.Label>
                 <Form.Control
                   disabled={nextSubmissionState !== null}

@@ -9,6 +9,7 @@
   "language-it": "Italiano (Italian)",
   "loading": "Loading...",
   "not-configured": "Not configured.",
+  "question": "Question",
   "submission-footer-warning": "NB: only the answers submitted <strong>from this browser</strong> are shown here. <emph>The official submission is the most recent one, even if submitted from a different browser.</emph>",
   "submission-form-title": "Send your answers",
   "submission-status-error-message": "An error occurred. Answers NOT saved.",

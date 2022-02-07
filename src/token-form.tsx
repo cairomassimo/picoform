@@ -116,7 +116,7 @@ export function TokenForm({ tokenState }: { tokenState: TokenState }) {
               onClick={() => { setToken(null); }}
             >
               <FormattedMessage defaultMessage="Change token" id="token-change-label" />
-           </Button>
+            </Button>
           </Container>
         </Form.Group>
       </Form>
