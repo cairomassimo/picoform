@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { defineMessage, IntlProvider, MessageDescriptor, useIntl } from "react-intl";
 import { Form } from "react-bootstrap";
 
@@ -18,40 +18,47 @@ const languageNames: Record<SupportedLanguage, MessageDescriptor> = {
   it: defineMessage({ defaultMessage: `Italiano (Italian)`, id: `language-it` }),
 };
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
+function useLanguageState() {
   const browserLanguage = useBrowserLanguage();
   const [overrideLanguage, setOverrideLanguage] = useState<SupportedLanguage | null>(null);
   const currentLanguage = overrideLanguage ?? browserLanguage;
 
+  return { browserLanguage, currentLanguage, setOverrideLanguage };
+}
+
+const context = createContext<ReturnType<typeof useLanguageState> | null>(null);
+
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const state = useLanguageState();
+
+  const { currentLanguage } = state;
+
   return (
-    <IntlProvider
-      defaultLocale={defaultLanguage}
-      locale={currentLanguage}
-      messages={messages[currentLanguage]}
-      defaultRichTextElements={{
-        strong: (content) => <strong>{content}</strong>,
-        emph: (content) => <i>{content}</i>,
-      }}
-    >
-      <LanguageSelector onChange={setOverrideLanguage} browserLanguage={browserLanguage} />
-      {children}
-    </IntlProvider>
+    <context.Provider value={state}>
+      <IntlProvider
+        defaultLocale={defaultLanguage}
+        locale={currentLanguage}
+        messages={messages[currentLanguage]}
+        defaultRichTextElements={{
+          strong: (content) => <strong>{content}</strong>,
+          emph: (content) => <i>{content}</i>,
+        }}
+      >
+        {children}
+      </IntlProvider>
+    </context.Provider>
   );
 }
 
-function LanguageSelector({
-  onChange,
-  browserLanguage,
-}: {
-  onChange: (language: SupportedLanguage | null) => void;
-  browserLanguage: SupportedLanguage;
-}) {
+export function LanguageSelector() {
   const intl = useIntl();
+  const { browserLanguage, setOverrideLanguage } = useContext(context)!;
 
   return (
     <Form.Select
+      className="w-auto"
       onChange={(event) => {
-        onChange((event.currentTarget.value || null) as SupportedLanguage | null);
+        setOverrideLanguage((event.currentTarget.value || null) as SupportedLanguage | null);
       }}
     >
       <option

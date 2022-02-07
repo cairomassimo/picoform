@@ -6,7 +6,8 @@ import { TokenForm, useTokenState } from "./token-form";
 import { Helmet } from "react-helmet";
 import { AnnouncementList } from "./announcement-list";
 
-import { Container, Form, Navbar } from "react-bootstrap";
+import { Container, Navbar } from "react-bootstrap";
+import { LanguageSelector } from './intl';
 
 export const previousAnswersLimit = 10;
 
@@ -42,11 +43,7 @@ export function Main() {
             <img src="/logo.png" alt="" width="32" height="32" className="d-inline-block me-3" />
             <span> {title} </span>
           </Navbar.Brand>
-          <Form.Select className="w-auto">
-            <option value="" label="Auto (Italiano)" />
-            <option value="en" label="English - inglese" />
-            <option value="it" label="Italiano" />
-          </Form.Select>
+          <LanguageSelector />
         </Container>
       </Navbar>
 
