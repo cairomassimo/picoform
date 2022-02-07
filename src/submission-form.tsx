@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Submission } from "./submission";
 import { submissionCollection } from "./firestore";
 import { FormattedMessage } from "react-intl";
-import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 export function SubmissionForm({
   user,

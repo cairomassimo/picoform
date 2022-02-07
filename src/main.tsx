@@ -39,7 +39,7 @@ export function Main() {
         </Container>
       </Navbar>
 
-      <Container>
+      <Container className="ps-3 pe-3">
         {(!user || !config) && <FormattedMessage defaultMessage="Loading..." id="loading" />}
         {user && config && (
           <>

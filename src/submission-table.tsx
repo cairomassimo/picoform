@@ -1,7 +1,6 @@
 import { FormattedMessage, FormattedTime } from "react-intl";
 import { Submission } from "./submission";
-import {Accordion, Alert, Button, ListGroup, Modal, Row} from "react-bootstrap";
-import {useState} from "react";
+import { Accordion, Alert, ListGroup } from "react-bootstrap";
 
 export function SubmissionTable({
   submissions,

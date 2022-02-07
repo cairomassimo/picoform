@@ -3,7 +3,6 @@ import { FormattedMessage } from "react-intl";
 import { SubmissionForm } from "./submission-form";
 import { useSubmissions } from "./submission-list";
 import { SubmissionTable } from "./submission-table";
-import {Timestamp} from "@firebase/firestore";
 
 export function SubmissionPanel({
   numberOfQuestions,
